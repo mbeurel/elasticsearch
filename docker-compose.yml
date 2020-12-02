@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  elasticsearch:
+    image:  docker.elastic.co/elasticsearch/elasticsearch:6.8.10
+    container_name: elasticsearch
+    networks:
+      - traefik
+    restart: always
+    volumes:
+      - "${ELASTIC_SEARCH_PATH}:/usr/share/elasticsearch/data"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.redirect-to-https.redirectScheme.scheme=https"
+      - "traefik.http.middlewares.redirect-to-https.redirectScheme.permanent=true"
+      - "traefik.http.routers.mercure.rule=Host(`${ELASTIC_SEARCH_DOMAIN}`)"
+      - "traefik.http.routers.mercure.entryPoints=web"
+      - "traefik.http.routers.mercure.middlewares=redirect-to-https"
+      - "traefik.http.routers.mercure-https.rule=Host(`${ELASTIC_SEARCH_DOMAIN}`)"
+      - "traefik.http.routers.mercure-https.entryPoints=websecure"
+      - "traefik.http.routers.mercure-https.tls=true"
+      - "traefik.http.routers.mercure-https.tls.certresolver=${CERT_RESOLVER}"
+    environment:
+      - node.name=elasticsearch
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+networks:
+  traefik:
+    external:
+      name: traefik

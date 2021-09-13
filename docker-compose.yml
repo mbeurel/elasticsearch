@@ -13,13 +13,13 @@ services:
       - "traefik.enable=true"
       - "traefik.http.middlewares.redirect-to-https.redirectScheme.scheme=https"
       - "traefik.http.middlewares.redirect-to-https.redirectScheme.permanent=true"
-      - "traefik.http.routers.mercure.rule=Host(`${ELASTIC_SEARCH_DOMAIN}`)"
-      - "traefik.http.routers.mercure.entryPoints=web"
-      - "traefik.http.routers.mercure.middlewares=redirect-to-https"
-      - "traefik.http.routers.mercure-https.rule=Host(`${ELASTIC_SEARCH_DOMAIN}`)"
-      - "traefik.http.routers.mercure-https.entryPoints=websecure"
-      - "traefik.http.routers.mercure-https.tls=true"
-      - "traefik.http.routers.mercure-https.tls.certresolver=${CERT_RESOLVER}"
+      - "traefik.http.routers.elastic-search.rule=Host(`${ELASTIC_SEARCH_DOMAIN}`)"
+      - "traefik.http.routers.elastic-search.entryPoints=web"
+      - "traefik.http.routers.elastic-search.middlewares=redirect-to-https"
+      - "traefik.http.routers.elastic-search-https.rule=Host(`${ELASTIC_SEARCH_DOMAIN}`)"
+      - "traefik.http.routers.elastic-search-https.entryPoints=websecure"
+      - "traefik.http.routers.elastic-search-https.tls=true"
+      - "traefik.http.routers.elastic-search-https.tls.certresolver=${CERT_RESOLVER}"
     environment:
       - node.name=elasticsearch
       - bootstrap.memory_lock=true
